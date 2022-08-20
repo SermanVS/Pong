@@ -2,9 +2,8 @@
 #include <stdio.h>
 
 void printScore(int player1Score, int player2Score);
-void initializeField(char* field, int height, int width);
 void initializeElements(int height, int width, int* player1RacketPosition, int* player2RacketPosition, int* ballX, int* ballY, int* ballDx, int* ballDy);
-void displayField(char* field, int height, int width, int player1RacketPosition, int player2RacketPosition, int ballX, int ballY);
+void displayField(int height, int width, int player1RacketPosition, int player2RacketPosition, int ballX, int ballY);
 int isOut(int ballX, int width);
 int isCollisionWithWall(int ballY, int ballDy, int height);
 int isCollisionWithRacket(int ballX, int ballY, int ballDx, int player1RacketPosition, int player2RacketPosition, int width);
@@ -15,13 +14,12 @@ int main() {
   int height = 25, width = 80;
   int player1Score = 0, player2Score = 0;
   int player1RacketPosition, player2RacketPosition, ballX, ballY, ballDx, ballDy;
-  char field[80 * 25] = {' '};
   char input;
 
-  initializeField(field, height, width);
+  //initializeField(field, height, width);
   initializeElements(height, width, &player1RacketPosition, &player2RacketPosition, &ballX, &ballY, &ballDx, &ballDy);
   printScore(player1Score, player2Score);
-  displayField(field, height, width, player1RacketPosition, player2RacketPosition, ballX, ballY);
+  displayField(height, width, player1RacketPosition, player2RacketPosition, ballX, ballY);
 
   
   while (player1Score < 21 && player2Score < 21) {
@@ -42,7 +40,7 @@ int main() {
     }
     system("cls");
     printScore(player1Score, player2Score);
-    displayField(field, height, width, player1RacketPosition, player2RacketPosition, ballX, ballY);
+    displayField(height, width, player1RacketPosition, player2RacketPosition, ballX, ballY);
   }
 
   printf("Game over!");
@@ -52,28 +50,6 @@ int main() {
 
 void printScore(int player1Score, int player2Score) {
   printf("%38d%7d\n", player1Score, player2Score);
-}
-
-void initializeField(char* field, int height, int width) {
-  for (int i = 0; i < height; i++) {
-    for (int j = 0; j < width; j++)
-    {     
-      // Print field borders
-      if (j == 0 || j == width - 1 || i == 0 || i == height - 1) {
-        field[i * width + j] = '*';
-      }
-
-      // Print center net
-      else if (j == width / 2) {
-        field[i * width + j] = '#';
-      }
-      
-      // Fill all free space with spaces
-      else {
-        field[i * width + j] = ' ';
-      } 
-    }
-  }
 }
 
 void initializeElements(int height, int width, int* player1RacketPosition, int* player2RacketPosition, int* ballX, int* ballY, int* ballDx, int* ballDy) {
@@ -86,7 +62,7 @@ void initializeElements(int height, int width, int* player1RacketPosition, int* 
 }
 
 
-void displayField(char* field, int height, int width, int player1RacketPosition, int player2RacketPosition, int ballX, int ballY) {
+void displayField(int height, int width, int player1RacketPosition, int player2RacketPosition, int ballX, int ballY) {
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       
@@ -99,7 +75,19 @@ void displayField(char* field, int height, int width, int player1RacketPosition,
         printf("O");
       }
       else {
-         printf("%c", *(field + i * width + j));
+        if (j == 0 || j == width - 1 || i == 0 || i == height - 1) {
+          printf("*");
+        }
+
+        // Print center net
+        else if (j == width / 2) {
+          printf("#");
+        }
+
+        // Fill all free space with spaces
+        else {
+          printf(" ");
+        }
       }
       
     }
